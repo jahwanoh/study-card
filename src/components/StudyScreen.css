@@ -1,0 +1,137 @@
+.study-screen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.study-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.chapter-info {
+  text-align: center;
+  flex: 1;
+}
+
+.chapter-info h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.chapter-info p {
+  margin: 5px 0 0 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.progress-section {
+  max-width: 400px;
+  margin: 0 auto 30px;
+}
+
+.progress-text {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.card-wrapper {
+  margin-bottom: 30px;
+}
+
+.response-buttons {
+  display: flex;
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.response-button {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: white;
+}
+
+.response-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.know-button {
+  background: linear-gradient(135deg, #43A047, #66BB6A);
+}
+
+.unsure-button {
+  background: linear-gradient(135deg, #FB8C00, #FFA726);
+}
+
+.button-icon {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .study-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .chapter-info {
+    text-align: left;
+  }
+
+  .response-buttons {
+    flex-direction: column;
+  }
+}
