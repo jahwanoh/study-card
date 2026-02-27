@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { StudySession } from '../types';
-import { chapter1_1 } from '../data/chapter1_1';
+import { getChapter } from '../data/chapters';
 import './CompletionScreen.css';
 
 interface CompletionScreenProps {
@@ -11,9 +11,11 @@ interface CompletionScreenProps {
 }
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ session, onReview, onHome }) => {
+  const chapter = getChapter(session.chapterId);
   const knownCount = session.knownCards.length;
   const unsureCount = session.unsureCards.length;
-  const successRate = Math.round((knownCount / chapter1_1.cards.length) * 100);
+  const totalCards = chapter ? chapter.cards.length : session.totalCards;
+  const successRate = Math.round((knownCount / totalCards) * 100);
 
   const getEncouragement = () => {
     if (successRate === 100) return "Perfect! You know everything! 🎉";
@@ -40,7 +42,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ session, onReview, 
           >
             ✓
           </motion.div>
-          <h1>Chapter Complete!</h1>
+          <h1>Chapter {session.chapterId} Complete!</h1>
           <p>{getEncouragement()}</p>
         </div>
 

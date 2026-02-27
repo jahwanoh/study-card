@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { UserProgress } from '../types';
-import { chapter1_1 } from '../data/chapter1_1';
+import { getTotalCards, getAllChapters } from '../data/chapters';
 import './HomeScreen.css';
 
 interface HomeScreenProps {
@@ -11,28 +11,37 @@ interface HomeScreenProps {
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ progress, onStartStudy, onStartReview }) => {
-  const calculateProgress = () => {
+  const calculateOverallProgress = () => {
     if (!progress || !progress.sessions) return 0;
 
-    const chapter11Sessions = progress.sessions.filter(
-      session => session.chapterId === '1.1' && session.completedAt
-    );
+    // Get all unique known cards across all chapters
+    const allKnownCards = new Set<string>();
+    progress.sessions.forEach(session => {
+      session.knownCards.forEach(cardId => allKnownCards.add(cardId));
+    });
 
-    if (chapter11Sessions.length === 0) return 0;
-
-    const lastSession = chapter11Sessions[chapter11Sessions.length - 1];
-    const progressPercent = (lastSession.knownCards.length / chapter1_1.cards.length) * 100;
-
-    return Math.round(progressPercent);
+    const totalCards = getTotalCards();
+    return totalCards > 0 ? Math.round((allKnownCards.size / totalCards) * 100) : 0;
   };
 
-  const getUnsureCount = () => {
+  const getTotalUnsureCards = () => {
     if (!progress || !progress.unsureCards) return 0;
-    return progress.unsureCards['1.1']?.length || 0;
+
+    let total = 0;
+    Object.values(progress.unsureCards).forEach(cards => {
+      total += cards.length;
+    });
+    return total;
   };
 
-  const progressPercent = calculateProgress();
-  const unsureCount = getUnsureCount();
+  const getCompletedChapters = () => {
+    return progress?.chaptersCompleted?.length || 0;
+  };
+
+  const progressPercent = calculateOverallProgress();
+  const unsureCount = getTotalUnsureCards();
+  const completedChapters = getCompletedChapters();
+  const totalChapters = getAllChapters().length;
 
   return (
     <div className="home-screen">
@@ -54,24 +63,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ progress, onStartStudy, onStart
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <div className="chapter-header">
-            <span className="chapter-number">Chapter 1.1</span>
-            <h2 className="chapter-title">Values & Principles</h2>
+            <span className="chapter-number">All Chapters</span>
+            <h2 className="chapter-title">Complete Study Guide</h2>
           </div>
 
           <div className="chapter-description">
-            {chapter1_1.description}
+            Master all {totalChapters} chapters covering British values, history, geography, culture, and government
           </div>
 
           <div className="progress-info">
-            <div className="progress-label">Progress: {progressPercent}%</div>
+            <div className="progress-label">Overall Progress: {progressPercent}%</div>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
             </div>
-            <div className="card-count">{chapter1_1.cards.length} cards to study</div>
+            <div className="card-count">
+              {completedChapters} of {totalChapters} chapters completed • {getTotalCards()} total cards
+            </div>
           </div>
 
           <button className="start-button" onClick={onStartStudy}>
-            Start Study
+            Select Chapter to Study
           </button>
         </motion.div>
 
@@ -82,10 +93,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ progress, onStartStudy, onStart
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <h3>Review Unsure Cards</h3>
-            <p>{unsureCount} cards to review</p>
-            <button className="review-button" onClick={onStartReview}>
-              Review Now
+            <h3>Review All Unsure Cards</h3>
+            <p>{unsureCount} cards to review across all chapters</p>
+            <div className="review-note">
+              Select a chapter to review specific cards
+            </div>
+            <button className="review-button" onClick={onStartStudy}>
+              Go to Chapters
             </button>
           </motion.div>
         )}
@@ -109,11 +123,25 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ progress, onStartStudy, onStart
               </div>
               <div className="stat-item">
                 <div className="stat-value">{progressPercent}%</div>
-                <div className="stat-label">Success Rate</div>
+                <div className="stat-label">Overall Progress</div>
               </div>
             </div>
           </motion.div>
         )}
+
+        <motion.div
+          className="quick-actions"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
+          <h3>Quick Actions</h3>
+          <div className="action-buttons">
+            <button className="action-button" onClick={onStartStudy}>
+              📚 Browse Chapters
+            </button>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -48,6 +48,19 @@
   opacity: 0.9;
 }
 
+.review-mode-badge {
+  display: inline-block;
+  background: rgba(251, 140, 0, 0.3);
+  color: #FFF;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
 .progress-section {
   max-width: 400px;
   margin: 0 auto 30px;

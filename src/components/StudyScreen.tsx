@@ -1,29 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FlipCard from './FlipCard';
 import { Card, CardResponse, StudySession } from '../types';
-import { chapter1_1 } from '../data/chapter1_1';
+import { getChapter } from '../data/chapters';
 import './StudyScreen.css';
 
 interface StudyScreenProps {
+  chapterId: string;
+  reviewMode?: boolean;
   onComplete: (session: StudySession) => void;
   onBack: () => void;
 }
 
-const StudyScreen: React.FC<StudyScreenProps> = ({ onComplete, onBack }) => {
+const StudyScreen: React.FC<StudyScreenProps> = ({
+  chapterId,
+  reviewMode = false,
+  onComplete,
+  onBack
+}) => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [cards, setCards] = useState<Card[]>([]);
   const [session, setSession] = useState<StudySession>({
-    chapterId: '1.1',
+    chapterId: chapterId,
     startedAt: new Date(),
     knownCards: [],
     unsureCards: [],
     currentCardIndex: 0,
-    totalCards: chapter1_1.cards.length,
+    totalCards: 0,
   });
 
-  const currentCard: Card = chapter1_1.cards[currentCardIndex];
-  const progress = ((currentCardIndex + 1) / chapter1_1.cards.length) * 100;
+  const chapter = getChapter(chapterId);
+
+  useEffect(() => {
+    if (chapter) {
+      let studyCards = chapter.cards;
+
+      // In review mode, only show unsure cards
+      if (reviewMode) {
+        const savedProgress = localStorage.getItem('user_progress');
+        if (savedProgress) {
+          const progress = JSON.parse(savedProgress);
+          const unsureCardIds = progress.unsureCards[chapterId] || [];
+          studyCards = chapter.cards.filter(card => unsureCardIds.includes(card.id));
+        }
+      }
+
+      setCards(studyCards);
+      setSession(prev => ({
+        ...prev,
+        chapterId: chapterId,
+        totalCards: studyCards.length,
+      }));
+    }
+  }, [chapter, chapterId, reviewMode]);
+
+  if (!chapter || cards.length === 0) {
+    return (
+      <div className="study-screen">
+        <div className="study-header">
+          <button className="back-button" onClick={onBack}>
+            ← Back
+          </button>
+          <div className="chapter-info">
+            <h2>No cards to study</h2>
+            <p>{reviewMode ? 'No cards to review' : 'Chapter not found'}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentCard: Card = cards[currentCardIndex];
+  const progress = ((currentCardIndex + 1) / cards.length) * 100;
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -42,7 +91,7 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onComplete, onBack }) => {
     setSession(updatedSession);
 
     // Check if this was the last card
-    if (currentCardIndex === chapter1_1.cards.length - 1) {
+    if (currentCardIndex === cards.length - 1) {
       updatedSession.completedAt = new Date();
       onComplete(updatedSession);
     } else {
@@ -61,14 +110,15 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onComplete, onBack }) => {
           ← Back
         </button>
         <div className="chapter-info">
-          <h2>Chapter {chapter1_1.chapter}</h2>
-          <p>{chapter1_1.title}</p>
+          <h2>Chapter {chapter.chapter}</h2>
+          <p>{chapter.title}</p>
+          {reviewMode && <p className="review-mode-badge">Review Mode</p>}
         </div>
       </div>
 
       <div className="progress-section">
         <div className="progress-text">
-          Card {currentCardIndex + 1} of {chapter1_1.cards.length}
+          Card {currentCardIndex + 1} of {cards.length}
         </div>
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -77,7 +127,7 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onComplete, onBack }) => {
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentCardIndex}
+          key={`${chapterId}-${currentCardIndex}`}
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}

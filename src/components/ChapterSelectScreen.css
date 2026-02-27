@@ -1,0 +1,248 @@
+.chapter-select-screen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.chapter-select-header {
+  color: white;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.chapter-select-header .back-button {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.chapter-select-header .back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.chapter-select-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto 40px;
+}
+
+.chapter-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.chapter-card.locked {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.chapter-card.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.chapter-card.completed {
+  border: 2px solid #43A047;
+}
+
+.chapter-number {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.chapter-number .check-mark {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.chapter-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.chapter-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+}
+
+.chapter-stats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card-count {
+  font-size: 14px;
+  color: #666;
+  background: #F5F5F5;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.unsure-count {
+  font-size: 14px;
+  color: #FB8C00;
+  background: #FFF3E0;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.chapter-progress {
+  margin-top: 15px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+}
+
+.locked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.lock-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.lock-text {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.total-progress {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.total-progress h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 25px 0;
+  text-align: center;
+}
+
+.total-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chapters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .total-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .chapter-select-header h1 {
+    font-size: 24px;
+    margin-top: 40px;
+  }
+
+  .chapter-select-header .back-button {
+    position: static;
+    transform: none;
+    margin-bottom: 20px;
+  }
+}
