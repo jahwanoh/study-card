@@ -1,18 +1,16 @@
 import { Chapter } from '../../types';
-import { chapter1_1 } from './chapter1_1';
-import { chapter1_2 } from './chapter1_2';
-import { chapter1_3 } from './chapter1_3';
-import { chapter1_4 } from './chapter1_4';
-import { chapter1_5 } from './chapter1_5';
-import { chapter1_6 } from './chapter1_6';
+import { chapter1 } from './chapter1';
+import { chapter2 } from './chapter2';
+import { chapter3 } from './chapter3';
+import { chapter4 } from './chapter4';
+import { chapter5 } from './chapter5';
 
 export const chapters: Chapter[] = [
-  chapter1_1,
-  chapter1_2,
-  chapter1_3,
-  chapter1_4,
-  chapter1_5,
-  chapter1_6,
+  chapter1,
+  chapter2,
+  chapter3,
+  chapter4,
+  chapter5,
 ];
 
 export const getChapter = (chapterId: string): Chapter | undefined => {
@@ -36,10 +34,9 @@ export const getChapterProgress = (chapterId: string, knownCards: string[]): num
 };
 
 export {
-  chapter1_1,
-  chapter1_2,
-  chapter1_3,
-  chapter1_4,
-  chapter1_5,
-  chapter1_6,
+  chapter1,
+  chapter2,
+  chapter3,
+  chapter4,
+  chapter5,
 };

@@ -12,7 +12,7 @@ type Screen = 'home' | 'chapters' | 'study' | 'review' | 'completion';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
-  const [selectedChapterId, setSelectedChapterId] = useState<string>('1.1');
+  const [selectedChapterId, setSelectedChapterId] = useState<string>('1');
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [lastSession, setLastSession] = useState<StudySession | null>(null);
   const [reviewMode, setReviewMode] = useState(false);
